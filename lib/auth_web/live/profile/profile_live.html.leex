@@ -1,0 +1,134 @@
+<!-- /profile -->
+<section class="m-0 p-0 py-0 space-y-3 max-w-screen w-screen lg:w-2/3"> <!-- -->
+    <div class="glass-2 rounded-b-3xl p-8 pb-10 mb-4 grow max-w-screen"> <!-- pb-0 -->
+        <div class="flex flex-row md:flex-col justify-center items-center">
+            <div class="rounded-full overflow-hidden border-box border-solid border-2 w-40 h-40 bg-white">
+                <img alt="Profile image"
+                     src=<%= AuthWeb.ImageController.show_img_with_profile_img_path(@user.profile_img_path) %> />
+            </div>
+
+            <div class="flex flex-col flex-grow pl-10 md:p-0 gap-0 w-80 justify-center items-center w-full">
+                <h3 class="font-bold m-0"><%= "#{@user.name} #{@user.lastname}" %></h3>
+                <h2 class="font-semibold text-3xl"><%= @user.profission %></h2>
+                <span><%= @user.username %></span>
+            </div>
+        </div>
+
+        <div class="my-5 w-full h-0.5 bg-gray-300"></div>
+
+        <!-- Sobre -->
+        <div class="flex fle-row items-center justify-between font-semibold text-3xl mb-3">
+            Sobre
+            <%= if @current_user.id == @user.id do %>
+                <div class="py-1 px-3 border border-white rounded-lg">
+                    <a class="flex flex-row items-center justify-center gap-3 font-normal text-white hover:text-white"
+                       href=<%= Routes.user_settings_path(@socket, :edit_profile) %> >
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" height="20" width="20" viewBox="0 -960 960 960">
+                            <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
+                            <title>Editar perfil</title>
+                        </svg>
+                        <span class="select-none">Editar perfil</span>
+                    </a>
+                </div>
+            <% end %>
+        </div>
+        <%= if @user.bio do%>
+            <div class="mb-4 pl-3 py-2 rounded-md bg-sky-500 hover:bg-sky-300">
+                <%= @user.bio %>
+            </div>
+        <% end %>
+
+        <div class="space-y-4">
+            <!-- Profissao -->
+            <div class="flex flex-col pl-3 py-2 rounded-md bg-sky-500 hover:bg-sky-300">
+                <span class="font-semibold">Profissão:</span>
+                <span class="pl-2 text-2xl"><%= @user.profission %></span>
+            </div>
+
+            <!-- Endereco -->
+            <div class="flex flex-col pl-3 py-2 rounded-md bg-sky-500 hover:bg-sky-300">
+                <span class="font-semibold">Endereço:</span>
+                <span class="pl-2 text-2xl"><%= @user.endereco %></span>
+            </div>
+
+            <!-- Telefone -->
+            <div class="flex flex-col pl-3 py-2 rounded-md bg-sky-500 hover:bg-sky-300">
+                <span class="font-semibold">Telefone:</span>
+                <span class="pl-2 text-2xl"><%= @user.phone %></span>
+            </div>
+
+            <!-- E-mail -->
+            <div class="flex flex-col pl-3 py-2 rounded-md bg-sky-500 hover:bg-sky-300">
+                <span class="font-semibold">E-mail:</span>
+                <span class="pl-2 text-2xl"><%= @user.email_prof %></span>
+            </div>
+
+            <%= if @user.instagram || @user.linkedin || @user.facebook do %>
+            <span class="flex justify-center font-semibold">Redes sociais:</span>
+            <div class="flex flex-row items-center justify-evenly">
+                <!-- Instagram -->
+                <%= if @user.instagram do %>
+                    <a target="_blank" rel="noopener noreferrer"
+                       href=<%= "https://www.instagram.com/#{String.trim_leading(@user.instagram, "@")}" %> >
+                        <svg class="group/instagram" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path class="group-hover/instagram:fill-pink-600" fill="#ffffff" fill-rule="evenodd" clip-rule="evenodd" d="M12 18C15.3137 18 18 15.3137 18 12C18 8.68629 15.3137 6 12 6C8.68629 6 6 8.68629 6 12C6 15.3137 8.68629 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z"></path>
+                            <path class="group-hover/instagram:fill-pink-600" fill="#ffffff" d="M18 5C17.4477 5 17 5.44772 17 6C17 6.55228 17.4477 7 18 7C18.5523 7 19 6.55228 19 6C19 5.44772 18.5523 5 18 5Z"></path>
+                            <path class="group-hover/instagram:fill-pink-600" fill="#ffffff" fill-rule="evenodd" clip-rule="evenodd" d="M1.65396 4.27606C1 5.55953 1 7.23969 1 10.6V13.4C1 16.7603 1 18.4405 1.65396 19.7239C2.2292 20.8529 3.14708 21.7708 4.27606 22.346C5.55953 23 7.23969 23 10.6 23H13.4C16.7603 23 18.4405 23 19.7239 22.346C20.8529 21.7708 21.7708 20.8529 22.346 19.7239C23 18.4405 23 16.7603 23 13.4V10.6C23 7.23969 23 5.55953 22.346 4.27606C21.7708 3.14708 20.8529 2.2292 19.7239 1.65396C18.4405 1 16.7603 1 13.4 1H10.6C7.23969 1 5.55953 1 4.27606 1.65396C3.14708 2.2292 2.2292 3.14708 1.65396 4.27606ZM13.4 3H10.6C8.88684 3 7.72225 3.00156 6.82208 3.0751C5.94524 3.14674 5.49684 3.27659 5.18404 3.43597C4.43139 3.81947 3.81947 4.43139 3.43597 5.18404C3.27659 5.49684 3.14674 5.94524 3.0751 6.82208C3.00156 7.72225 3 8.88684 3 10.6V13.4C3 15.1132 3.00156 16.2777 3.0751 17.1779C3.14674 18.0548 3.27659 18.5032 3.43597 18.816C3.81947 19.5686 4.43139 20.1805 5.18404 20.564C5.49684 20.7234 5.94524 20.8533 6.82208 20.9249C7.72225 20.9984 8.88684 21 10.6 21H13.4C15.1132 21 16.2777 20.9984 17.1779 20.9249C18.0548 20.8533 18.5032 20.7234 18.816 20.564C19.5686 20.1805 20.1805 19.5686 20.564 18.816C20.7234 18.5032 20.8533 18.0548 20.9249 17.1779C20.9984 16.2777 21 15.1132 21 13.4V10.6C21 8.88684 20.9984 7.72225 20.9249 6.82208C20.8533 5.94524 20.7234 5.49684 20.564 5.18404C20.1805 4.43139 19.5686 3.81947 18.816 3.43597C18.5032 3.27659 18.0548 3.14674 17.1779 3.0751C16.2777 3.00156 15.1132 3 13.4 3Z"></path>
+                            <title>Instagram</title>
+                        </svg>
+                    </a>
+                <% end %>
+
+                <!-- Linkedin -->
+                <%= if @user.linkedin do %>
+                    <a target="_blank" rel="noopener noreferrer"
+                       href=<%= "https://www.linkedin.com/in#{@user.linkedin}" %> >
+                        <svg class="group/linkedin" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path class="group-hover/linkedin:fill-blue-700" fill="#ffffff" d="M6.5 8C7.32843 8 8 7.32843 8 6.5C8 5.67157 7.32843 5 6.5 5C5.67157 5 5 5.67157 5 6.5C5 7.32843 5.67157 8 6.5 8Z"></path>
+                            <path class="group-hover/linkedin:fill-blue-700" fill="#ffffff" d="M5 10C5 9.44772 5.44772 9 6 9H7C7.55228 9 8 9.44771 8 10V18C8 18.5523 7.55228 19 7 19H6C5.44772 19 5 18.5523 5 18V10Z"></path>
+                            <path class="group-hover/linkedin:fill-blue-700" fill="#ffffff" d="M11 19H12C12.5523 19 13 18.5523 13 18V13.5C13 12 16 11 16 13V18.0004C16 18.5527 16.4477 19 17 19H18C18.5523 19 19 18.5523 19 18V12C19 10 17.5 9 15.5 9C13.5 9 13 10.5 13 10.5V10C13 9.44771 12.5523 9 12 9H11C10.4477 9 10 9.44772 10 10V18C10 18.5523 10.4477 19 11 19Z"></path>
+                            <path class="group-hover/linkedin:fill-white" fill="#ffffff" fill-rule="evenodd" clip-rule="evenodd" d="M20 1C21.6569 1 23 2.34315 23 4V20C23 21.6569 21.6569 23 20 23H4C2.34315 23 1 21.6569 1 20V4C1 2.34315 2.34315 1 4 1H20ZM20 3C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3H20Z"></path>
+                            <title>Linkedin</title>
+                        </svg>
+                    </a>
+                <% end %>
+
+                <!-- Facebook -->
+                <%= if @user.facebook do %>
+                    <a target="_blank" rel="noopener noreferrer"
+                       href=<%= "https://www.facebook.com/#{String.trim_leading(@user.facebook, "/")}" %> >
+                        <svg class="group/facebook" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path class="group-hover/facebook:fill-blue-800" fill="#ffffff" fill-rule="evenodd" clip-rule="evenodd" d="M20 1C21.6569 1 23 2.34315 23 4V20C23 21.6569 21.6569 23 20 23H4C2.34315 23 1 21.6569 1 20V4C1 2.34315 2.34315 1 4 1H20ZM20 3C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H15V13.9999H17.0762C17.5066 13.9999 17.8887 13.7245 18.0249 13.3161L18.4679 11.9871C18.6298 11.5014 18.2683 10.9999 17.7564 10.9999H15V8.99992C15 8.49992 15.5 7.99992 16 7.99992H18C18.5523 7.99992 19 7.5522 19 6.99992V6.31393C19 5.99091 18.7937 5.7013 18.4813 5.61887C17.1705 5.27295 16 5.27295 16 5.27295C13.5 5.27295 12 6.99992 12 8.49992V10.9999H10C9.44772 10.9999 9 11.4476 9 11.9999V12.9999C9 13.5522 9.44771 13.9999 10 13.9999H12V21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3H20Z"></path>
+                            <title>Facebook</title>
+                        </svg>
+                    </a>
+                <% end %>
+            </div>
+            <% end %>
+        </div>
+    </div>
+
+
+    <div id="infinite-scroll-hook" class="space-y-3" phx-hook="InfiniteScroll">
+        <%= if Enum.count(@posts) >= 1 do %>
+            <!-- Render post -->
+            <%= for post <- @posts do %>
+                <%= live_component AuthWeb.PostLive, post: post, current_user: @current_user %>
+            <% end %>
+
+            <%= if @has_more_posts do %>
+                <!-- Loading Spinner HTML -->
+                <div class="flex my-4 justify-center items-center" id="loading-more-posts loading">
+                    <div class="loader ease-linear rounded-full border-2 border-t-2 border-gray-200 h-16 w-16">
+                    </div>
+                </div>
+            <% else %>
+                <div class="flex my-2 items-center justify-center" id="no-more-posts">
+                    Não há mais posts para mostrar.
+                </div>
+            <% end %>
+        <% end %>
+    </div>
+
+</section>

@@ -1,0 +1,70 @@
+<section class="sec">
+
+  <div class="glass mx-10 p-8 pb-4 space-y-10 w-11/12 max-w-5xl">
+
+    <h1 class="text-6xl font-bold flex justify-center">
+      Configurações
+    </h1>
+
+    <div>
+      <h3 class="flex justify-center font-normal">
+        Alterar e-mail
+      </h3>
+
+      <.form let={f} for={@email_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_email">
+        <%= if @email_changeset.action do %>
+          <div class="alert alert-danger">
+            <p>Ops, algo deu errado! Verifique os erros abaixo.</p>
+          </div>
+        <% end %>
+
+        <%= hidden_input f, :action, name: "action", value: "update_email" %>
+
+        <%= label f, :email, "Novo e-mail" %>
+        <%= email_input f, :email, required: true %>
+        <%= error_tag f, :email %>
+
+        <%= label f, :Senha_atual, for: "current_password_for_email" %>
+        <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_email" %>
+        <%= error_tag f, :current_password %>
+
+        <div class="flex justify-center">
+          <%= submit "Alterar email", class: "primary_btn" %>
+        </div>
+      </.form>
+    </div>
+
+    <div>
+      <h3 class="flex justify-center font-normal">
+        Alterar senha
+      </h3>
+
+      <.form let={f} for={@password_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_password">
+        <%= if @password_changeset.action do %>
+          <div class="alert alert-danger">
+            <p>Ops, algo deu errado! Verifique os erros abaixo.</p>
+          </div>
+        <% end %>
+
+        <%= hidden_input f, :action, name: "action", value: "update_password" %>
+
+        <%= label f, :password, "Nova senha" %>
+        <%= password_input f, :password, required: true %>
+        <%= error_tag f, :password %>
+
+        <%= label f, :password_confirmation, "Confirme a nova senha" %>
+        <%= password_input f, :password_confirmation, required: true %>
+        <%= error_tag f, :password_confirmation %>
+
+        <%= label f, :current_password, "Confirme a senha", for: "current_password_for_password" %>
+        <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_password" %>
+        <%= error_tag f, :current_password %>
+
+        <div class="flex justify-center">
+          <%= submit "Alterar senha", class: "primary_btn" %>
+        </div>
+      </.form>
+    </div>
+
+  </div>
+</section>

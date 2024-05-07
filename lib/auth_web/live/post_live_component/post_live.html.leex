@@ -1,0 +1,235 @@
+<% post_user = Auth.Accounts.get_user!(@post.user_id) %>
+
+<div class="glass-1 flex flex-col p-8 space-y-3 justify-center grow max-w-screen" id=<%= @post.id %> >
+
+    <!-- Header -->
+    <div class="flex flex-row items-center justify-between gap-2 w-full">
+
+        <a class="flex flex-row gap-3 justify-center items-center"
+           href=<%= post_user.username %> >
+            <div class="rounded-full overflow-hidden w-16 h-16 bg-white">
+                <img alt="Profile-Photo"
+                    src=<%= AuthWeb.ImageController.show_img_with_profile_img_path(post_user.profile_img_path) %>
+                />
+            </div>
+
+            <div class="font-semibold text-white">
+                <%= post_user.name <> " " <> post_user.lastname %>
+            </div>
+        </a>
+
+        <!-- Time -->
+        <div>
+            <span title="<%= format_datetime(@post.date, @post.time) %>"
+                class="select-none pt-1.5 pr-5 text-xl font-normal text-white">
+                <%= hours_since_posted(@post.date, @post.time) %>
+            </span>
+<<<<<<< HEAD
+
+
+            <%= if (@post.user_id == @current_user.id) == nil do %>
+            <!-- Options !!! remove the == null  -->
+                <button id="<%= "btn_options-#{@post.id}" %>" onclick="openOption();" class="btn btn_options cursor-pointer fill-white hover:fill-sky-600 focus:fill-sky-600">
+                    <svg width="24px" viewBox="0 0 64 64" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:serif="http://www.serif.com/" version="1.1" xml:space="preserve"><rect id="Icons" x="-192" y="-64" width="1280" height="800" style="fill:none;"/><g id="Icons1" serif:id="Icons"><g id="Strike"/><g id="H1"/><g id="H2"/><g id="H3"/><g id="list-ul"/><g id="hamburger-1"/><g id="hamburger-2"/><g id="list-ol"/><g id="list-task"/><g id="trash"/><g id="vertical-menu"/><g id="horizontal-menu"><path d="M56.086,31.96c0,2.207 -1.793,4 -4,4c-2.208,0 -4,-1.793 -4,-4c0,-2.208 1.792,-4 4,-4c2.207,0 4,1.792 4,4Z"/><path d="M16.086,31.96c0,2.207 -1.793,4 -4,4c-2.208,0 -4,-1.793 -4,-4c0,-2.208 1.792,-4 4,-4c2.207,0 4,1.792 4,4Z"/><path d="M36.086,31.96c0,2.207 -1.793,4 -4,4c-2.208,0 -4,-1.793 -4,-4c0,-2.208 1.792,-4 4,-4c2.207,0 4,1.792 4,4Z"/></g><g id="sidebar-2"/><g id="Pen"/><g id="Pen1" serif:id="Pen"/><g id="clock"/><g id="external-link"/><g id="hr"/><g id="info"/><g id="warning"/><g id="plus-circle"/><g id="minus-circle"/><path id="caret-down" d="M32.149,109.79l-24.071,-24.071l3.009,-3.009l21.062,21.062l21.061,-21.062l3.009,3.009l-24.07,24.071Z" style="fill-rule:nonzero;"/><g id="vue"/><g id="cog"/><g id="logo"/><g id="eye-slash"/><g id="eye"/><g id="toggle-off"/><g id="shredder"/><g id="spinner--loading--dots-" serif:id="spinner [loading, dots]"/><g id="react"/></g></svg>
+                </button>
+
+                <div id="<%= "options_field-#{@post.id}" %>"
+                    class="hidden absolute divide-y divide-sky-200 right-3 top-20 z-10 w-40 md:w-56 rounded-md shadow-lg focus:outline-none bg-sky-600"
+                >
+                    <!--- Delete Post -->
+                    <div class="py-1">
+                        <form class="m-0" phx-submit="delete_post" action="#">
+                            <input type="hidden" name="post_id" value="<%= @post.id %>"/>
+                            <button type="submit" onclick="return confirmDeletePost()"
+                                    class="text-white block m-0 px-4 py-2 text-2xl bg-red-400 w-full hover:text-white hover:bg-red-800 focus:text-white focus:bg-red-800">
+                                Excluir
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <script>
+                    function confirmDeletePost() {
+                        return confirm('Tem certeza de que deseja deletar este post?');
+                    }
+
+
+                    function openOption() {
+                        let postId, optionsField;
+ 
+                        const btnOptions = document.querySelectorAll('.btn_options');
+
+                        // A cada botão, coloca um ouvinte de evento
+                        btnOptions.forEach(btnOption => {
+                            btnOption.addEventListener('click', (e) => {
+
+                                // Pega o ID da postagem através do id do botão
+                                postId = parseInt(btnOption.id.split("-")[1]);
+                                optionsField = document.getElementById(`options_field-${postId}`);
+
+                                if (optionsField) {
+                                    console.log(postId);
+                                    optionsField.classList.toggle("hidden");
+                                    return null;
+                                }
+                            });
+                        });
+                        console.log(`fora do loop ${postId}`)
+
+
+                            // document.addEventListener("click", function(event) {
+                            //     if (btnOption && !btnOption.contains(event.target)) {
+                            //         optionsField.classList.add("hidden");
+                            //         console.log(btnOption.contains(event.target));
+                            //     }
+                            // });
+                    };
+
+                </script>
+            <% end %>
+=======
+>>>>>>> parent of 4b3df59 (updt: automatic search && delete post)
+        </div>
+
+    </div>
+
+    <!-- Body -->
+    <div class="flex flex-col gap-4 items-center justify-center px-6 w-full">
+        <p class="my-2 w-full">
+            <%= @post.text %>
+        </p>
+
+        <%= if !is_nil(@post.photo_url) do %>
+            <img alt="Post-Image" class="rounded-xl max-w-full "
+              src="<%= AuthWeb.ImageController.img_url_to_base64(@post.photo_url) %>" />
+        <% end %>
+    </div>
+
+
+    <!-- Footer -->
+    <div class="flex flex-col space-y-3 border-t w-full">
+        <!-- Statistics -->
+        <div class="flex items-center justify-end px-3 text-gray-200 text-xl">
+            <span><%= if @post.likes != 0, do: to_string(@post.likes) <> " curtida(s)" %></span>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-row justify-evenly items-center w-full">
+            <!-- Likes -->
+            <div>
+                <a class="flex flex-row gap-3 items-center cursor-pointer text-2xl text-white hover:text-white" phx-click="like" phx-value-post_id="<%= @post.id %>">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 h-8 <%= if @current_user.id in @post.liked_by, do: "fill-green-300", else: "fill-transparent stroke-white stroke-1" %>" >
+                        <path d="M7.493 18.75c-.425 0-.82-.236-.975-.632A7.48 7.48 0 016 15.375c0-1.75.599-3.358 1.602-4.634.151-.192.373-.309.6-.397.473-.183.89-.514 1.212-.924a9.042 9.042 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75 2.25 2.25 0 012.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H14.23c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23h-.777zM2.331 10.977a11.969 11.969 0 00-.831 4.398 12 12 0 00.52 3.507c.26.85 1.084 1.368 1.973 1.368H4.9c.445 0 .72-.498.523-.898a8.963 8.963 0 01-.924-3.977c0-1.708.476-3.305 1.302-4.666.245-.403-.028-.959-.5-.959H4.25c-.832 0-1.612.453-1.918 1.227z" />
+                    </svg>
+                    <span>Gostei</span>
+                </a>
+            </div>
+
+            <!-- Comments -->
+            <div>
+                <a class="comment-button flex flex-row gap-3 items-center cursor-pointer text-2xl text-white hover:text-white" id=<%= "comment_id-#{@post.id}" %> >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 h-8 fill-transparent stroke-white stroke-1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.282 48.282 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                    </svg>
+                    <span>Comentar</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Seleciona todos os botões de comentar através do atributo class
+        const commentButtons = document.querySelectorAll('.comment-button');
+
+        // A cada botão de comentar, coloca um ouvinte de evento
+        commentButtons.forEach(commentButton => {
+            commentButton.addEventListener('click', (e) => {
+                // Pega o ID da postagem através do id do botão de comentar
+                const postId = parseInt(commentButton.id.split("-")[1]);
+
+                // Usa o ID da postagem para achar o input correspondente
+                const textareaComment = document.getElementById(`textarea_comment-${postId}`);
+
+                // Focar no input do comentário
+                if (textareaComment) {
+                    textareaComment.focus();
+                }
+            });
+        });
+    });
+    </script>
+
+    <!-- Comment Text Input -->
+    <div class="flex grow w-full">
+        <form class="flex flex-row m-0 gap-3 items-center justify-center w-full" phx-submit="save_comment">
+            <textarea class="comment-textarea"
+                      id="textarea_comment-<%= @post.id %>"
+                      name="text-comment"
+                      placeholder="Escreva um comentário..."
+                      maxlength="400"
+                      rows=1
+            ></textarea>
+
+            <input type="hidden" name="postid" value=<%= @post.id %> />
+
+            <button type="submit" phx-disable-with="..."
+                    class="flex m-0 h-12 w-12 items-center justify-center rounded-full font-semibold text-xl sm:text-2xl md:text-3xl bg-sky-600 hover:bg-white">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="h-10 w-12 pl-1 fill-gray-300 hover:fill-sky-600">
+                    <path d="M120-160v-640l760 320-760 320Zm60-93 544-227-544-230v168l242 62-242 60v167Zm0 0v-457 457Z"/>
+                </svg>
+            </button>
+        </form>
+    </div>
+
+    <!-- Comments Field -->
+    <div class="flex flex-col space-y-3">
+        <% comentarios = Auth.Comment.list_comments(@post.id) %>
+        <% count_comentarios = Enum.count(comentarios) %>
+
+        <%= cond do %>
+          <% count_comentarios > 0 -> %>
+            <span>
+                Comentários
+                <span class="font-medium">&bullet; <%= count_comentarios %></span>
+            </span>
+          <% true -> %>
+            <% nil %>
+        <% end %>
+
+        <%= for comment <- comentarios do %>
+        <div class="flex flex-row gap-2 w-full">
+            <!-- Profile Photo Comment -->
+            <a class="flex justify-center items-center" href=<%= comment.user.username %> >
+                <div class="rounded-full overflow-hidden w-12 h-12 bg-white">
+                    <img alt="Profile-Photo"
+                        src=<%= AuthWeb.ImageController.show_img_with_profile_img_path(comment.user.profile_img_path) %>
+                    />
+                </div>
+            </a>
+
+            <div class="flex flex-col px-3 py-2 justify-start w-full rounded-b-2xl rounded-se-2xl bg-sky-600">
+
+                <!-- Name Lastname Comment -->
+                <div class="flex flex-row items-center justify-between pr-2">
+                    <a class="flex justify-start items-center w-fit" href=<%= comment.user.username %> >
+                        <div class="text-2xl font-semibold text-white">
+                            <%= comment.user.name <> " " <> comment.user.lastname %>
+                        </div>
+                    </a>
+                    <!-- Time -->
+                    <span title="<%= format_datetime(comment.date, comment.time) %>"
+                         class="select-none pt-1.5 pl-2 text-xl font-normal text-white">
+                        <%= hours_since_posted(comment.date, comment.time) %>
+                    </span>
+                </div>
+
+                <span class="pl-1 text-normal text-2xl">
+                    <%= comment.text %>
+                </span>
+            </div>
+
+        </div>
+        <% end %>
+
+    </div>
+</div>

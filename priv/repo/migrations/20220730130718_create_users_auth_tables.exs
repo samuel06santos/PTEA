@@ -1,0 +1,42 @@
+defmodule Auth.Repo.Migrations.CreateUsersAuthTables do
+  use Ecto.Migration
+
+  def change do
+    execute "CREATE EXTENSION IF NOT EXISTS citext", ""
+
+    create table(:users) do
+      add :email, :citext, null: false
+      add :username, :string
+      add :name, :string
+      add :lastname, :string
+      add :bio, :string
+
+      add :profission, :string
+      add :endereco, :string
+      add :phone, :string
+      add :email_prof, :string
+      add :instagram, :string
+      add :linkedin, :string
+      add :facebook, :string
+
+      add :profile_img_path, :string
+
+      add :hashed_password, :string, null: false
+      add :confirmed_at, :naive_datetime
+      timestamps()
+    end
+
+    create unique_index(:users, [:email])
+
+    create table(:users_tokens) do
+      add :user_id, references(:users, on_delete: :delete_all), null: false
+      add :token, :binary, null: false
+      add :context, :string, null: false
+      add :sent_to, :string
+      timestamps(updated_at: false)
+    end
+
+    create index(:users_tokens, [:user_id])
+    create unique_index(:users_tokens, [:context, :token])
+  end
+end

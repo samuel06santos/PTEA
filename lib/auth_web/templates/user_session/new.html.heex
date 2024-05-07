@@ -1,0 +1,35 @@
+<section class="sec-h">
+  <div class="glass mx-10 p-8 space-y-20 w-11/12 max-w-5xl">
+
+    <h1 class="flex justify-center text-6xl md:text-7xl font-bold">
+      Entrar
+    </h1>
+
+    <.form let={f} for={@conn} action={Routes.user_session_path(@conn, :create)} as={:user}>
+      <%= if @error_message do %>
+        <div class="alert alert-danger">
+          <p><%= @error_message %></p>
+        </div>
+      <% end %>
+
+      <%= label f, :email, "E-mail" %>
+      <%= email_input f, :email, required: true %>
+
+      <%= label f, :password, "Senha" %>
+      <%= password_input f, :password, required: true %>
+
+      <!-- <%= label f, :remember_me, "Mantenha-me conectado por 60 dias" %> -->
+      <!-- <%= checkbox f, :remember_me, value: true %> -->
+
+      <p class="decoration-blue-600">
+        <!-- <%= link "Cadastrar", to: Routes.user_registration_path(@conn, :new) %> | -->
+        <%= link "Esqueci a senha", to: Routes.user_reset_password_path(@conn, :new), class: "primary_btn"%>
+      </p>
+
+      <div class="flex py-4 items-center justify-center">
+        <%= submit "Entrar", class: "primary_btn text-2xl md:text-3xl" %>
+      </div>
+    </.form>
+
+  </div>
+</section>

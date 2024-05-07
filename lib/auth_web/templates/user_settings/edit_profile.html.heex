@@ -1,0 +1,147 @@
+<section class="sec">
+    <div class="glass my-4 p-8 py-4 space-y-10 grow w-full md:max-w-7xl w-11/12"> <!-- glass my-4 p-8 py-4 space-y-10 grow w-full md:max-w-7xl w-11/12  -->
+
+        <h1 class="text-6xl font-bold flex justify-center">
+            Editar Perfil
+        </h1>
+
+        <.form let={f} for={@account_changeset} action={Routes.user_settings_path(@conn, :update_profile)} multipart={true} id="update_account">
+            <% if @account_changeset.action do %>
+            <div class="alert alert-danger">
+                <p>Ops, algo deu errado! Verifique os erros abaixo.</p>
+            </div>
+            <% end %>
+
+            <%= hidden_input f, :action, name: "action", value: "update_account" %>
+
+            <!-- Foto do perfil -->
+            <div class="flex items-center justify-center">
+                <div class="group/profile relative flex items-center justify-center rounded-full overflow-hidden select-none border-box border-solid border-2 w-48 h-48 bg-white">
+
+                    <img id="image_profile" class="select-none group-hover/profile:blur-sm" alt="user profile photo"
+                         src={AuthWeb.ImageController.show_img_with_profile_img_path(@current_user.profile_img_path)} />
+
+                    <label class="absolute flex flex-row items-center justify-center w-16 h-16 right-[35px] overflow-hidden cursor-pointer">
+                        <%= file_input f, :file_input, class: "hidden" %>
+                        <i>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="fill-transparent group-hover/profile:fill-white w-[40px] h-[40px]"  viewBox="0 0 512 512">
+                                <path d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z"/>
+                            </svg>
+                        </i>
+                    </label>
+                </div>
+            </div>
+
+
+            <div class="flex flex-col md:flex-row md:gap-3 md:items-center">
+                <!-- Nome -->
+                <div class="md:w-1/3">
+                    <%= label f, :name, "Nome:" %>
+                    <%= text_input f, :name, value: @current_user.name %>
+                    <%= error_tag f, :name %>
+                </div>
+
+                <!-- Sobrenome -->
+                <div class="md:w-1/3">
+                    <%= label f, :lastname, "Sobrenome:" %>
+                    <%= text_input f, :lastname, value: @current_user.lastname %>
+                    <%= error_tag f, :lastname %>
+                </div>
+
+                <!-- Usuário -->
+                <div class="md:w-1/3">
+                    <div class="flex flex-row justify-start gap-2">
+                        <svg aria-label="Restringir" viewBox="0 0 14 21" class="x1lliihq x1jwls1v x1n2onr6 x17fnjtu x1yxark7 x117rol3" style="fill: currentColor; height: 20px;">
+                            <title>Restringir</title>
+                            <path d="M2.43 20.432c-.743 0-1.306-.202-1.69-.606-.384-.397-.576-.996-.576-1.797v-6.924c0-.794.192-1.39.576-1.787.384-.397.948-.595 1.69-.595h9.14c.742 0 1.306.198 1.69.595.384.397.576.993.576 1.787v6.924c0 .801-.192 1.4-.576 1.797-.384.404-.947.606-1.69.606H2.43Zm.273-1.758h8.594c.202 0 .358-.062.469-.186.11-.117.166-.293.166-.527v-6.777c0-.235-.056-.41-.166-.528-.111-.117-.267-.176-.47-.176H2.704a.634.634 0 0 0-.469.176c-.11.117-.166.293-.166.528v6.777c0 .234.056.41.166.527a.615.615 0 0 0 .47.186Zm-.752-9.131V6.438c0-1.205.235-2.21.703-3.018.476-.814 1.097-1.426 1.866-1.836A5.187 5.187 0 0 1 7 .969c.885 0 1.712.205 2.48.615.769.41 1.387 1.022 1.856 1.836.475.807.713 1.813.713 3.018v3.105h-1.826V6.262c0-.762-.15-1.403-.45-1.924a3.019 3.019 0 0 0-1.171-1.201A3.223 3.223 0 0 0 7 2.727c-.58 0-1.113.136-1.602.41a3.019 3.019 0 0 0-1.171 1.2c-.293.522-.44 1.163-.44 1.925v3.281H1.951Z">
+                            </path>
+                        </svg>
+                        <%= label f, :username, "Usuário:" %>
+                    </div>
+                    <%= text_input f, :username, disabled: true, value: @current_user.username,
+                        class: "disabled:bg-sky-200 disabled:text-slate-600 disabled:border-slate-200 disabled:shadow-none" %>
+                    <%= error_tag f, :username %>
+                </div>
+            </div>
+
+            <!-- Bio -->
+            <%= label f, :bio, "Bio:" %>
+            <%= textarea f, :bio, class: "form-textarea", value: @current_user.bio, rows: "4" %>
+            <%= error_tag f, :bio %>
+
+            <!-- Profissão -->
+            <%= label f, :profission, "Profissão:" %>
+            <%= text_input f, :profission, value: @current_user.profission, placeholder: "exemplo: Psicóloga" %>
+            <%= error_tag f, :profission %>
+
+            <!-- Endereço -->
+            <%= label f, :endereco, "Endereço:" %>
+            <%= text_input f, :endereco, value: @current_user.endereco %>
+            <%= error_tag f, :endereco %>
+
+            <div class="flex flex-col md:flex-row md:gap-3 md:items-center">
+                <div class="md:w-1/2">
+                    <!-- Telefone -->
+                    <%= label f, :phone, "Telefone profissional:" %>
+                    <%= text_input f, :phone, value: @current_user.phone %>
+                    <%= error_tag f, :phone %>
+                </div>
+
+                <div class="md:w-1/2">
+                    <!-- Email Profissional -->
+                    <%= label f, :email_prof, "E-mail profissional:" %>
+                    <%= email_input f, :email_prof, value: @current_user.email_prof %>
+                    <%= error_tag f, :email_prof %>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row md:gap-3 md:items-center">
+                <!-- Instagram -->
+                <div class="md:w-1/3">
+                    <%= label f, :instagram, "Instagram:" %>
+                    <%= text_input f, :instagram, value: @current_user.instagram, placeholder: "exemplo: /#{@current_user.name|>String.downcase|>String.trim}-#{@current_user.lastname|>String.downcase|>String.trim}-7b534624b" %>
+                    <%= error_tag f, :instagram %>
+                </div>
+
+                <!-- Linkedin -->
+                <div class="md:w-1/3">
+                    <%= label f, :linkedin, "Linkedin:" %>
+                    <%= text_input f, :linkedin, value: @current_user.linkedin, placeholder: "exemplo: /#{@current_user.username}" %>
+                    <%= error_tag f, :linkedin %>
+                </div>
+
+                <!-- Facebook -->
+                <div class="md:w-1/3">
+                    <%= label f, :facebook, "Facebook:" %>
+                    <%= text_input f, :facebook, value: @current_user.facebook, placeholder: "exemplo: /#{@current_user.username}" %>
+                    <%= error_tag f, :facebook %>
+                </div>
+            </div>
+
+
+            <!-- Confirme a senha -->
+            <div class="flex flex-col">
+                <%= label f, :current_password, "Confirme a senha:",
+                    class: "before:content-['*'] before:mr-0.5 before:text-4xl before:text-red-600 text-white block",
+                    for: "current_password_for_password" %>
+                <%= password_input f, :current_password, required: true, class: "text-white", name: "current_password", id: "current_password_for_password" %>
+                <%= error_tag f, :current_password %>
+            </div>
+
+
+            <div class="flex justify-center">
+                <%= submit "Alterar", class: "select-none primary_btn" %>
+            </div>
+        </.form>
+        <script>
+        document.getElementById('update_account_file_input').addEventListener('change', function(event) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var previewImage = document.getElementById('image_profile');
+                previewImage.src = e.target.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        });
+        </script>
+    </div>
+</section>

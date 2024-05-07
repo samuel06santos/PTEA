@@ -1,0 +1,26 @@
+<section class="sec-h">
+    <div class="glass mx-10 p-8 space-y-10 w-11/12 max-w-5xl">
+        <h1 class="flex items-center justify-center font-semibold">Redefinir senha</h1>
+
+        <.form let={f} for={@changeset} action={Routes.user_reset_password_path(@conn, :update, @token)}>
+          <%= if @changeset.action do %>
+            <div class="alert alert-danger">
+              <p>Oops, algo deu errado! Por favor cheque os erros abaixo.</p>
+            </div>
+          <% end %>
+
+          <%= label f, :password, "Nova senha" %>
+          <%= password_input f, :password, required: true %>
+          <%= error_tag f, :password %>
+
+          <%= label f, :password_confirmation, "Confirmar nova senha" %>
+          <%= password_input f, :password_confirmation, required: true %>
+          <%= error_tag f, :password_confirmation %>
+
+          <div class="flex items-center mt-3 justify-center">
+            <%= submit "Redefinir senha", class: "primary_btn text-3xl md:text-3xls" %>
+          </div>
+        </.form>
+
+    </div>
+</section>

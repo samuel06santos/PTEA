@@ -1,0 +1,22 @@
+<section class="sec-h">
+  <div class="glass mx-10 p-8 space-y-10 w-11/12 max-w-5xl">
+
+    <h1 class="text-6xl md:text-7xl font-bold flex justify-center">
+      Esqueci a senha
+    </h1>
+
+    <h5 class="text-3xl font-normal">
+      Enviar instruções para redefinir a senha
+    </h5>
+
+    <.form let={f} for={:user} action={Routes.user_reset_password_path(@conn, :create)}>
+      <%= label f, :email %>
+      <%= email_input f, :email, required: true %>
+
+      <div class="flex py-4 justify-center">
+        <%= submit "Enviar", class: "primary_btn" %>
+      </div>
+    </.form>
+
+</div>
+</section>

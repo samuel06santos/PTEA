@@ -1,0 +1,135 @@
+<nav>
+  <div class="flex flex-row justify-between items-center p-2 gap-3">
+    <div class="w-max px-4">
+      <a class="flex flex-row items-center gap-4"
+         href={Routes.page_path(@conn, :index)}>
+        <img height="32" width="32" alt="Logo" class="select-none"
+             src={Routes.static_path(@conn, "/images/logo_PTEA.png")} />
+        <div class="select-none text-white font-bold text-5xl">
+          PTEA
+        </div>
+      </a>
+    </div>
+
+    <%= if @current_user do %>
+
+    <div class="flex flex-row items-center p-2 gap-6 justify-self-end">
+
+      <!-- Search Button -->
+      <a href={Routes.live_path(@conn, AuthWeb.SearchLive)}>
+        <div class="block p-2 cursor-pointer font-semibold rounded-full text-white hover:text-sky-600 bg-sky-600 hover:bg-white">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" height="20" width="20">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            <title>Pesquisar profissional</title>
+          </svg>
+        </div>
+      </a>
+
+
+      <!-- Profile Button -->
+      <div>
+        <a class="flex flex-row gap-3 items-center "
+           href={URI.decode(Routes.live_path(@conn, AuthWeb.ProfileLive, @current_user.username))}>
+
+          <!-- Profile Photo -->
+          <div class="select-none rounded-full overflow-hidden bg-white w-[30px] h-[30px]">
+            <img alt="Profile-Photo" class="object-center" height="30" width="30"
+               src={AuthWeb.ImageController.show_img_with_profile_img_path(@current_user.profile_img_path)} />
+          </div>
+
+          <!-- Name Lastname -->
+          <div class="select-none hidden md:block text-white font-semibold text-3xl">
+            <%= @current_user.name <> " " <> @current_user.lastname %>
+          </div>
+        </a>
+      </div>
+
+      <!-- Menu -->
+      <div class="relative inline-block">
+        <!-- Button Menu -->
+        <div>
+          <button type="button" id="menu-button" aria-expanded="true" aria-haspopup="true"
+              class="inline-flex justify-center items-center p-2 m-0 h-full font-semibold text-xl md:text-3xl rounded-full bg-sky-600 text-white shadow-sm hover:text-sky-600 hover:bg-white">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" height="20" width="20">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+              <title>Menu</title>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Dropdown -->
+        <div class="hidden absolute divide-y divide-sky-200 mt-5 right-0 z-10 w-56 md:w-80 origin-top-right rounded-md bg-sky-600 shadow-lg focus:outline-none"
+             id="menu-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+
+          <!-- Edit Profile -->
+          <div class="py-1">
+            <a class="text-white block px-4 py-2 text-2xl hover:text-white hover:bg-sky-500"
+               href={Routes.user_settings_path(@conn, :edit_profile)}>
+              Editar Perfil
+            </a>
+          </div>
+
+          <!-- Account Settings -->
+          <div class="py-1">
+            <a class="text-white block px-4 py-2 text-2xl hover:text-white hover:bg-sky-500"
+               href={Routes.user_settings_path(@conn, :edit)}>
+              Configurações da conta
+            </a>
+          </div>
+
+
+          <!-- Exit Button -->
+          <div class="py-1">
+            <a class="text-white block px-4 py-2 text-2xl hover:text-white hover:bg-red-600 focus:text-white focus:bg-red-600"
+               href={Routes.user_session_path(@conn, :delete)}
+                data-csrf={Phoenix.Controller.get_csrf_token()}
+               data-method={:delete}
+               data-to={Routes.user_session_path(@conn, :delete)}>
+              Sair
+            </a>
+          </div>
+
+          <script>
+            button_menu = document.getElementById("menu-button");
+            menu_dropdown = document.getElementById("menu-dropdown");
+            button_menu.addEventListener("click", () => {
+              menu_dropdown.classList.toggle("hidden");
+            });
+
+            document.addEventListener("click", function(event) {
+              if (button_menu && !button_menu.contains(event.target)) {
+                menu_dropdown.classList.add("hidden");
+              }
+            });
+          </script>
+
+        </div>
+
+      </div>
+
+
+
+    </div>
+
+    <% else %>
+
+    <div class="flex flex-row items-center p-2 gap-3">
+
+      <div>
+        <a class="btn p-2 px-6 rounded-full bg-sky-600 text-white hover:text-sky-600 hover:bg-white font-semibold text-xl md:text-3xl"
+           href={Routes.user_session_path(@conn, :new)}>
+          Entrar
+        </a>
+      </div>
+
+      <div>
+        <a class="btn p-2 px-6 rounded-full bg-sky-600 text-white hover:text-sky-600 hover:bg-white font-semibold text-xl md:text-3xl"
+           href={Routes.user_registration_path(@conn, :new)}>
+          Cadastrar
+        </a>
+      </div>
+    </div>
+
+    <% end %>
+  </div>
+</nav>

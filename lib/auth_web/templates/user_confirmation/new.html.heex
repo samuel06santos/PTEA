@@ -1,0 +1,19 @@
+<section class="flex justify-center m-0 p-0 py-0 space-y-3 max-w-screen w-screen lg:w-2/3">
+
+  <div class="glass mx-10 p-8 pb-10 space-y-20 grow max-w-5xl">
+
+    <h1 class="text-5xl md:text-6xl font-bold flex justify-center">
+      Reenviar instruções de confirmação
+    </h1>
+
+    <.form let={f} for={:user} action={Routes.user_confirmation_path(@conn, :create)}>
+      <%= label f, :email %>
+      <%= email_input f, :email, required: true %>
+
+      <div class="flex justify-center">
+        <%= submit "Reenviar instruções de confirmação", class: "primary_btn" %>
+      </div>
+    </.form>
+
+  </div>
+</section>

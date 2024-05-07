@@ -1,0 +1,45 @@
+<section class="sec-h">
+  <div class="glass mx-10 p-8 space-y-10 w-11/12 max-w-5xl">
+
+    <h1 class="flex justify-center text-6xl md:text-7xl font-bold">
+      Cadastrar
+    </h1>
+
+    <.form let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}>
+
+      <%= label f, :name, "Nome" %>
+      <%= text_input f, :name, oninput: "this.value = capitalize(this.value)", required: true,
+        class: "registration first-letter:uppercase"
+      %>
+
+      <%= label f, :lastname, "Sobrenome" %>
+      <%= text_input f, :lastname, oninput: "this.value = capitalize(this.value)", required: true,
+        class: "registration first-letter:uppercase"
+      %>
+
+      <%= label f , :username, "Usuário" %>
+      <%= text_input f , :username, placeholder: "@", required: true,
+        class: "registration"
+      %>
+      <%= error_tag f, :username %>
+      <!-- , value: "@", oninput: "this.value = fix_username(this.value)" -->
+
+      <%= label f, :email, "E-mail" %>
+      <%= email_input f, :email, placeholder: "exemplo@gmail.com", required: true,
+        class: "registration"
+      %>
+      <%= error_tag f, :email %>
+
+      <%= label f, :password, "Senha" %>
+      <%= password_input f, :password, required: true,
+        class: "registration"
+      %>
+      <%= error_tag f, :password %>
+
+      <div class="flex py-4 justify-center">
+        <%= submit "Cadastrar", class: "primary_btn text-2xl md:text-3xl" %>
+      </div>
+    </.form>
+
+  </div>
+</section>

@@ -1,0 +1,151 @@
+<!-- Search Live /search -->
+<section class="m-0 p-0 max-w-screen w-screen lg:w-11/12">
+<div class="glass-2 lg:rounded-3xl m-0 lg:p-8 max-w-screen #">
+    <!-- Search Area -->
+    <div class="flex flex-col mt-4 items-center justify-center w-full">
+
+        <form class="flex flex-col m-0 p-0 items-center justify-center gap-1 w-full"
+        phx-submit="search-submit"
+        action={Routes.live_path(@conn, AuthWeb.SearchLive, :search)}>
+
+            <div class="flex flex-row m-0 p-0 pl-2 gap-1 items-center justify-center rounded-full bg-sky-200 w-11/12 lg:w-full">
+                <input type="search" style="padding-left: 4px;" class="grow focus:ring-transparent w-full" name="q" autofocus maxlength="2048" clear="none" placeholder="Pesquisar profissionais..." value="<%=@search_text %>" />
+
+                <button type="submit" class="flex items-center justify-center m-0 p-2 w-16 h-14 rounded-full bg-sky-600 text-white hover:text-sky-600 hover:bg-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    </svg>
+                </button>
+
+                <!--
+                <button type="button" class="flex items-center justify-center m-0 p-2 w-14 h-14 rounded-full bg-transparent text-black hover:text-slate-400" name="filter">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 -960 960 960">
+                        <path d="M440-120v-240h80v80h320v80H520v80h-80Zm-320-80v-80h240v80H120Zm160-160v-80H120v-80h160v-80h80v240h-80Zm160-80v-80h400v80H440Zm160-160v-240h80v80h160v80H680v80h-80Zm-480-80v-80h400v80H120Z"/>
+                    </svg>
+                </button>
+                -->
+            </div>
+
+            <div class="relative flex items-center justify-center m-0 mt-2 p-0 w-11/12 lg:w-full">
+
+                <div id="scrollLeft" class="left-0 top-0 transform z-10 p-2 rounded-full bg-sky-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" height="18" width="18" viewBox="0 -960 960 960">
+                        <path d="M360-200 80-480l280-280 56 56-183 184h647v80H233l184 184-57 56Z"/>
+                    </svg>
+                </div>
+
+                <div class="scroll-hidden overflow-x-scroll scroll-container flex flex-row gap-2 m-0 p-0">
+                    <%= for profession <- @professions do %>
+                        <input type="button" phx-click="filter-profession" phx-value-profession="<%= profession %>" class="primary_btn flex items-center justify-center py-2 px-4 font-normal text-2xl text-white whitespace-nowrap rounded-full bg-sky-600" style="box-shadow: none;" value=<%= profession %> />
+                    <% end %>
+                </div>
+
+                <div id="scrollRight" class="right-0 top-0 transform z-10 p-2 rounded-full bg-sky-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" height="18" width="18" viewBox="0 -960 960 960" >
+                        <path d="m600-200-57-56 184-184H80v-80h647L544-704l56-56 280 280-280 280Z"/>
+                    </svg>
+                </div>
+
+                <script>
+                    function smoothScroll(element, change, duration) {
+                        let start = element.scrollLeft,
+                            currentTime = 0,
+                            increment = 20;
+
+                        let animateScroll = function() {
+                            currentTime += increment;
+                            let val = Math.easeInOutQuad(currentTime, start, change, duration);
+                            element.scrollLeft = val;
+                            if(currentTime < duration) {
+                                requestAnimationFrame(animateScroll);
+                            }
+                        };
+
+                        Math.easeInOutQuad = function (t, b, c, d) {
+                            t /= d/2;
+                            if (t < 1) return c/2*t*t + b;
+                            t--;
+                            return -c/2 * (t*(t-2) - 1) + b;
+                        };
+
+                        animateScroll();
+                    }
+
+                    document.getElementById('scrollLeft').addEventListener('click', function() {
+                        smoothScroll(document.querySelector('.scroll-container'), -200, 600);
+                    });
+
+                    document.getElementById('scrollRight').addEventListener('click', function() {
+                        smoothScroll(document.querySelector('.scroll-container'), 200, 600);
+                    });
+
+                </script>
+            </div>
+        </form>
+
+    </div>
+
+    <!-- Counter Results -->
+    <span class="flex items-center justify-center m-0 p-0 text-slate-200 font-semibold">
+        <%= if not is_nil(@users) && @search_text != "" do %>
+            <% count = Enum.count(@users) %>
+            <%= if count >= 1 do %>
+                <%= count %> resultados encontrados
+            <% else %>
+                Nenhum resultado encontrado para "<%= @search_text %>"
+            <% end %>
+        <% else %>
+            <br>
+        <% end %>
+    </span>
+
+    <!-- Users Found -->
+    <div id="infinite-scroll-hook" class="flex flex-col items-center justify-center" phx-hook="InfiniteScroll">
+        <%= if not is_nil(@users) do %>
+            <%= for user <- @users do %>
+                <!-- Profile Field -->
+                <a class="grid grid-rows-3 grid-flow-col p-4 items-start justify-start text-white border-t border-white h-auto w-full bg-sky-500 hover:text-white hover:bg-sky-600"
+                    href=<%= URI.decode(Routes.live_path(@socket, AuthWeb.ProfileLive, user.username)) %> >
+
+                    <!-- Photo -->
+                    <div class="row-span-3 mr-4 rounded-full overflow-hidden w-16 h-16 bg-white">
+                        <img alt="Profile Image" src=<%= AuthWeb.ImageController.show_img_with_profile_img_path(user.profile_img_path) %> />
+                    </div>
+
+                    <div class="row-span-3 col-span-2">
+                        <!-- Name Lastname -->
+                        <div class="col-span-2 font-semibold">
+                            <%= user.name <> " " <> user.lastname %>
+                        </div>
+
+                        <!-- Profission -->
+                        <div class="row-span-1 col-span-2 leading-tight">
+                            <%= user.profission %>
+                        </div>
+
+                        <!-- Bio -->
+                        <div class="row-span-1 col-span-2 font-light leading-tight">
+                            <%=user.bio %>
+                        </div>
+                    </div>
+                </a>
+            <% end %>
+
+            <%= if @has_more_users do %>
+                <!-- Loading Spinner HTML -->
+                <div class="flex my-4 justify-center items-center" id="loading-more-users loading">
+                    <div class="loader ease-linear rounded-full border-2 border-t-2 border-gray-200 h-16 w-16">
+                    </div>
+                </div>
+            <% else %>
+                <div class="flex my-2 items-center justify-center" id="no-more-users">
+                    Não há mais usuários para mostrar.
+                </div>
+            <% end %>
+        <% end %>
+    </div>
+
+
+    </div>
+
+</section>

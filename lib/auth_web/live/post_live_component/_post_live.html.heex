@@ -1,0 +1,132 @@
+<div class="glass-1 flex flex-col p-8 space-y-3 justify-center grow max-w-screen" id="{@post.id}" >
+    <% post_user = Auth.Accounts.get_user!(@post.user_id) %>
+    <!-- Header -->
+    <div class="flex flex-row gap-2 w-full">
+
+        <a class="flex flex-row gap-3 justify-center items-center"
+           href={post_user.username}>
+            <div class="rounded-full overflow-hidden w-16 h-16 bg-white">
+                <img
+                    src={AuthWeb.ImageController.show_img_with_profile_img_path(post_user.profile_img_path)}
+                    alt="Profile-Photo"
+                />
+            </div>
+
+            <div class="font-semibold text-white">
+                <%= post_user.name <> " " <> post_user.lastname %>
+            </div>
+        </a>
+
+        <!-- Time -->
+        <div class="flex justify-center items-center pt-1.5 text-lg font-normal text-white">
+            <%= " • " <> format_time(@post.time) %>
+        </div>
+    </div>
+
+
+    <!-- Body -->
+    <div class="px-6 w-full">
+        <%= @post.text %>
+
+        <%= if !is_nil(@post.photo_url) do %>
+        <img
+            src={@post.photo_url}
+            alt="Post-Image"
+            class="mt-2"
+        />
+        <% end %>
+    </div>
+
+    <!-- Footer -->
+    <div class="flex flex-col space-y-3 border-t w-full">
+        <!-- Statistics -->
+        <div class="flex items-center justify-end px-3 text-gray-200 text-xl">
+            <span><%= if @post.likes != 0, do: to_string(@post.likes) <> " curtida(s)" %></span>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-row justify-evenly items-center w-full">
+            <!-- Likes -->
+            <div>
+                <button class="flex flex-row gap-3 items-center cursor-pointer text-2xl text-white hover:text-white" phx-click="like" phx-value-post_id="{@post.id}">
+                    <% fill_color = if @current_user.id in @post.liked_by, do: "fill-green-300", else: "fill-transparent stroke-white stroke-1" %>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 h-8 #{fill_color}" >
+                        <path d="M7.493 18.75c-..." />
+                    </svg>
+                    <span>Gostei</span>
+                </button>
+            </div>
+
+            <!-- Comments -->
+            <div>
+                <button class="flex flex-row gap-3 items-center cursor-pointer text-2xl text-white hover:text-white" phx-click="toggle-comments" phx-value-post_id={@post.id}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 h-8 fill-transparent stroke-white stroke-1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.282 48.282 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                    </svg>
+                    <span>Comentar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comment Text Input -->
+    <div class="flex grow w-full">
+        <form class="flex flex-row m-0 gap-3 items-center justify-center w-full" phx-submit="save_comment">
+            <textarea class="comment-textarea"
+              id={"textarea-comment-\#{@post.id}"}
+              name="text-comment"
+              placeholder="Escreva um comentário..."
+              maxlength="400"
+              rows="1"
+            ></textarea>
+
+            <input type="hidden" name="postid" value={@post.id} />
+
+            <button type="submit" phx-disable-with="..."
+                    class="flex m-0 h-12 w-12 items-center justify-center rounded-full font-semibold text-xl sm:text-2xl md:text-3xl bg-sky-600 hover:bg-white">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="h-10 w-12 pl-1 fill-gray-300 hover:fill-sky-600">
+                    <path d="M120-160v-640l760 320-760 320Zm60-93 544-227-544-230v168l242 62-242 60v167Zm0 0v-457 457Z"/>
+                </svg>
+            </button>
+        </form>
+    </div>
+
+    <!-- Comments Field -->
+    <div class="flex flex-col space-y-3">
+        <span class="text-white">
+            Comentários
+        </span>
+        <%= for comment <- Auth.Comment.list_comments(@post.id) do %>
+        <div class="flex flex-row gap-2 w-full">
+            <!-- Profile Photo Comment -->
+            <a class="flex justify-center items-center" href={comment.user.username} >
+                <div class="rounded-full overflow-hidden w-12 h-12 bg-white">
+                    <img
+                        src={AuthWeb.ImageController.show_img_with_profile_img_path(comment.user.profile_img_path)}
+                        alt="Profile-Photo"
+                    />
+                </div>
+            </a>
+
+            <div class="flex flex-col px-3 py-2 justify-start w-full rounded-b-2xl rounded-se-2xl bg-sky-600">
+                <!-- Name Lastname Comment -->
+                <div class="flex flex-row">
+                    <a class="flex justify-start items-center w-fit" href={comment.user.username} >
+                        <div class="text-2xl font-semibold text-white">
+                            <%= comment.user.name <> " " <> comment.user.lastname %>
+                        </div>
+                    </a>
+                    <!-- Time -->
+                    <div class="flex justify-center items-center pt-1.5 pl-2 text-lg font-normal text-white">
+                        <%= " • " <> format_time(comment.time) %>
+                    </div>
+                </div>
+
+                <span class="pl-1 text-normal text-2xl text-white">
+                    <%= comment.text %>
+                </span>
+            </div>
+        </div>
+        <% end %>
+    </div>
+</div>

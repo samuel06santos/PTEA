@@ -1,0 +1,19 @@
+<section class="sec-h">
+  <div class="glass mx-10 p-8 space-y-10 w-11/12 max-w-5xl">
+
+    <h1 class="text-6xl md:text-7xl font-bold flex justify-center">
+      Confirmar conta
+    </h1>
+
+    <p class="flex items-center justify-center font-medium">
+      Para finalmente confirmar a sua conta, clique no botão abaixo.
+    </p>
+
+    <.form let={_f} for={:user} action={Routes.user_confirmation_path(@conn, :update, @token)}>
+      <div class="flex justify-center">
+        <%= submit "Confirmar conta", class: "primary_btn" %>
+      </div>
+    </.form>
+
+  </div>
+</section>
